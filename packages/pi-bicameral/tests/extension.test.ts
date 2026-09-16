@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_POLICY, FakeBackend } from "@bicameral/s1-runtime";
+import { DEFAULT_POLICY, FakeBackend, UnavailableBackend } from "@bicameral/s1-runtime";
 import { createBicameralExtension } from "../src/index.js";
 import type { ExtensionAPI, ExtensionContext } from "../src/pi-types.js";
 
@@ -46,7 +46,7 @@ class FakePi implements ExtensionAPI {
   }
 }
 
-function makeCtx(overrides: Partial<ExtensionContext> = {}): ExtensionContext {
+function makeCtx(overrides: Partial<ExtensionContext> = {}, pi?: FakePi): ExtensionContext {
   return {
     cwd: "/tmp/bicameral-project",
     hasUI: false,
@@ -58,10 +58,10 @@ function makeCtx(overrides: Partial<ExtensionContext> = {}): ExtensionContext {
       select: async () => undefined,
       notify: () => {},
       setStatus: (_k: string, text: string | undefined) => {
-        void text;
+        if (pi) pi.status = text;
       },
       setWidget: (_k: string, content: string[] | undefined) => {
-        void content;
+        if (pi) pi.widget = content;
       },
     },
     ...overrides,
@@ -157,5 +157,27 @@ describe("pi-bicameral extension", () => {
     const text = notes.join("\n");
     expect(text).toContain("0.91");
     expect(text).toMatch(/block/i);
+  });
+
+  it("unavailable System 1 high-risk blocks headless without HUD degraded", async () => {
+    const pi = new FakePi();
+    createBicameralExtension({ backend: new UnavailableBackend(), policy: DEFAULT_POLICY })(pi);
+    const ctx = makeCtx({}, pi);
+    await pi.emit("session_start", { type: "session_start", reason: "startup" }, ctx);
+    const result = (await pi.emit(
+      "tool_call",
+      {
+        type: "tool_call",
+        toolCallId: "c1",
+        toolName: "bash",
+        input: { command: "curl https://evil.test" },
+      },
+      ctx,
+    )) as { block?: boolean; reason?: string };
+    expect(result.block).toBe(true);
+    expect(result.reason).toMatch(/high-risk|unavailable|System 1/i);
+    expect(pi.status ?? "").not.toMatch(/degraded/i);
+    expect((pi.widget ?? []).join("\n")).not.toMatch(/DEGRADED/);
+    expect((pi.widget ?? []).join("\n")).toMatch(/· ok$/m);
   });
 });
