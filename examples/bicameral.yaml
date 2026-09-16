@@ -1,0 +1,26 @@
+version: 1
+backend: typesafe
+mode: enforce
+budget:
+  s1_daily_usd: 5
+reflexes:
+  gate:
+    enabled: true
+    deadline_ms: 900
+    exfiltration: { block: 0.60, confirm: 0.25 }
+    injected_intent: { block: 0.80, confirm: 0.40 }
+    secret_access: { confirm: 0.50 }
+    scope_escape: { confirm: 0.50 }
+    reversibility: { confirm_at_level: 2, min_confidence: 0.5 }
+    headless_confirm_as: block
+  honest_finish:
+    enabled: true
+    test_weakened: { warn: 0.50, followup: 0.75 }
+    stub_introduced: { warn: 0.60 }
+    unverified_claim: { followup: 0.70 }
+    max_followups_per_prompt: 2
+  stuck:
+    enabled: true
+    window_turns: 6
+    repeat_failure: { steer: 0.70 }
+    no_progress: { steer: 0.70, raise_thinking: 0.85, ask_user_after: 3 }

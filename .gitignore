@@ -8,4 +8,6 @@ build/
 !.env.example
 .turbo/
 coverage/
+thoughts/
+.claude/cache/
 

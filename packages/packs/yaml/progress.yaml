@@ -1,0 +1,20 @@
+pack: progress
+version: 1
+description: Detect stuck loops, oscillation, and ignored errors
+state:
+  user_goal: string
+  recent_turns: array
+  pre_signals: array
+questions:
+  repeat_failure:
+    type: noul
+    instructions: The agent is repeating the same failing action with the same error
+  oscillation:
+    type: noul
+    instructions: The agent is oscillating between two edits or states without net progress
+  no_progress:
+    type: noul
+    instructions: The last turns made no measurable progress toward the goal
+  root_cause_ignored:
+    type: noul
+    instructions: The agent has not read or addressed the error message it keeps receiving

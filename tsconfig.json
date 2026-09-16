@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/packs" },
+    { "path": "./packages/s1-runtime" },
+    { "path": "./packages/pi-bicameral" }
+  ]
+}

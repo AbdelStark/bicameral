@@ -1,0 +1,29 @@
+{
+  "name": "@bicameral/packs",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Judgment packs (YAML) and loader for Bicameral System 1 reflexes",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "files": [
+    "src",
+    "yaml",
+    "schema.json"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@typesafe-ai/sdk": "0.6.0",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3"
+  }
+}

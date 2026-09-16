@@ -1,0 +1,10 @@
+packages:
+  - packages/*
+
+allowBuilds:
+  "@google/genai": false
+  esbuild: false
+  protobufjs: false
+
+minimumReleaseAgeExclude:
+  - "@typesafe-ai/sdk@0.6.0"

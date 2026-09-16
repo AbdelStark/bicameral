@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bicameral.dev/schemas/judgment-pack.json",
+  "title": "Bicameral judgment pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pack", "version", "questions"],
+  "properties": {
+    "pack": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "description": { "type": "string" },
+    "state": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Documented state shape; built in code, not sent as this map"
+    },
+    "questions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["noul", "score", "choice"] },
+          "instructions": {},
+          "criteria": {}
+        }
+      }
+    }
+  }
+}

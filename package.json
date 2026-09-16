@@ -1,0 +1,23 @@
+{
+  "name": "bicameral",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hybrid coding harness: System 2 writes code, System 1 runs the reflexes",
+  "license": "MIT",
+  "packageManager": "pnpm@11.17.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "pnpm -r typecheck",
+    "build": "pnpm -r build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.11",
+    "typescript": "~5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
